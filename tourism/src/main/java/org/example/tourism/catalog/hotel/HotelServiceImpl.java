@@ -58,6 +58,18 @@ public class HotelServiceImpl implements HotelService {
         Hotel hotel = new Hotel();
         BeanUtils.copyProperties(request, hotel);
 
+        if (request.getAmenities() != null && !request.getAmenities().isEmpty()) {
+            hotel.setAmenities(new HashSet<>(request.getAmenities()));
+        }
+
+        if (request.getImageUrls() != null && !request.getImageUrls().isEmpty()) {
+            hotel.setImageUrls(new ArrayList<>(request.getImageUrls()));
+        }
+
+        if (request.getSpokenLanguages() != null && !request.getSpokenLanguages().isEmpty()) {
+            hotel.setSpokenLanguages(new HashSet<>(request.getSpokenLanguages()));
+        }
+
 
         if (hotel.getCheckInTime() == null) hotel.setCheckInTime("15:00");
         if (hotel.getCheckOutTime() == null) hotel.setCheckOutTime("11:00");
@@ -85,11 +97,10 @@ public class HotelServiceImpl implements HotelService {
     @Override
     @Transactional(readOnly = true)
     public HotelDetailResponseDto getHotelDetail(Long id) {
-        // Use JOIN FETCH to avoid N+1 queries
+
         Hotel hotel = hotelRepository.findByIdWithRoomTypes(id)
                 .orElseThrow(() -> new EntityNotFoundException("Hotel not found"));
 
-        // No need to call calculateTotalRooms() separately - already loaded
         return mapToDetailDto(hotel);
     }
 

@@ -38,14 +38,12 @@ public class RoomTypeController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Get room type by ID", description = "Any authenticated user")
     public RoomTypeResponseDto getRoomType(@PathVariable Long id) {
         return roomTypeService.getRoomType(id);
     }
 
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Get all room types", description = "Any authenticated user with optional hotel filter")
     public List<RoomTypeResponseDto> getAllRoomTypes(
             @RequestParam(required = false) Long hotelId) {
@@ -107,9 +105,7 @@ public class RoomTypeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(imageUrls);
     }
 
-    /**
-     * Upload a single image for a room type
-     */
+
     @PostMapping("/{id}/upload-image")
     @PreAuthorize("hasAnyRole('ADMIN', 'HOTEL_MANAGER')")
     @Operation(summary = "Upload a single room type image", description = "Upload one image file for a room type")
@@ -127,9 +123,7 @@ public class RoomTypeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(urls.get(0));
     }
 
-    /**
-     * Delete an image from a room type
-     */
+
     @DeleteMapping("/{id}/images")
     @PreAuthorize("hasAnyRole('ADMIN', 'HOTEL_MANAGER')")
     @Operation(summary = "Delete room type image", description = "Remove an image from a room type")
@@ -166,9 +160,7 @@ public class RoomTypeController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Delete image by filename (cleaner URL pattern)
-     */
+
     @DeleteMapping("/{id}/images/{imageName}")
     @PreAuthorize("hasAnyRole('ADMIN', 'HOTEL_MANAGER')")
     @Operation(summary = "Delete room type image by name", description = "Remove an image from a room type using just the filename")
