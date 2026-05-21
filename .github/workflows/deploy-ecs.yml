@@ -11,7 +11,7 @@ permissions:
 
 env:
   AWS_REGION:  us-east-1
-  ECR_REPOSITORY: tourism
+  ECR_REPOSITORY: booking-app
   ECS_CLUSTER: altruistic-tiger-yf5ira
   ECS_SERVICE: booking-task-service-j9d1kl3t
   ECS_CONTAINER_NAME: booking-app
