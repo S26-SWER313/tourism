@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 env:
   AWS_REGION:  us-east-1
@@ -16,7 +15,7 @@ env:
   ECS_CLUSTER: altruistic-tiger-yf5ira
   ECS_SERVICE: booking-task-service-j9d1kl3t
   ECS_CONTAINER_NAME: booking-app
-  ALB_URL: internal-booking-alb-608111344.us-east-1.elb.amazonaws.com
+  ALB_URL: http://internal-booking-alb-608111344.us-east-1.elb.amazonaws.com
 
 jobs:
   test-build-deploy:
@@ -41,10 +40,12 @@ jobs:
           chmod +x mvnw
           ./mvnw -B test
 
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials from Learner Lab
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Log in to Amazon ECR
