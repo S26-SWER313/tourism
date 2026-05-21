@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature1/selina
 
 permissions:
   contents: read
