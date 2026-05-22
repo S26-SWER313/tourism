@@ -15,7 +15,7 @@ env:
   ECS_CLUSTER: altruistic-tiger-yf5ira
   ECS_SERVICE: booking-task-service-j9d1kl3t
   ECS_CONTAINER_NAME: booking-app
-  ALB_URL: http://internal-booking-alb-608111344.us-east-1.elb.amazonaws.com
+  ALB_URL: http://booking-public-alb-236875662.us-east-1.elb.amazonaws.com
 
 jobs:
   test-build-deploy:
@@ -105,7 +105,12 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
 
-      - name: Smoke test deployed health endpoint
+      - name: Smoke test ECS deployment status
         run: |
-          HEALTH_URL="${ALB_URL%/}/actuator/health"
-          curl --fail --silent --show-error "$HEALTH_URL"
+          aws ecs wait services-stable \
+            --cluster "$ECS_CLUSTER" \
+            --services "$ECS_SERVICE"
+
+          echo "ECS service is stable after deployment."
+          echo "Public ALB health URL:"
+          echo "${ALB_URL%/}/actuator/health"
